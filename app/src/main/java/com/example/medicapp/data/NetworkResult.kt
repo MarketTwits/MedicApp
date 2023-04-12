@@ -1,7 +1,7 @@
 package com.example.medicapp.data
 
-sealed class NetworkResult{
-    class Success<T>(val data : T) : NetworkResult()
-    class Failed(val errorMessage : String) : NetworkResult()
-    object Loading : NetworkResult()
+sealed class NetworkResult<T>(val data: T? = null, val message: String? = null) {
+    class Success<T>(data: T) : NetworkResult<T>(data)
+    class Error<T>(errorMessage: String?, data: T? = null) : NetworkResult<T>(data, errorMessage)
+    class Loading<T> : NetworkResult<T>()
 }
