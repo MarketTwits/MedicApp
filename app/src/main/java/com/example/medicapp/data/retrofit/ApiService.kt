@@ -1,5 +1,6 @@
 package com.example.medicapp.data.retrofit
 
+import com.example.medicapp.data.data_model.AuthTokenResponse
 import com.example.medicapp.data.data_model.CatalogCloud
 import com.example.medicapp.data.data_model.CatalogCloudItem
 import com.example.medicapp.data.data_model.SendCodeResponseCloud
@@ -17,4 +18,10 @@ interface ApiService {
     suspend fun sendAuthCode(
         @Header("email") email : String
     ) : SendCodeResponseCloud
+
+    @POST("signin")
+    suspend fun signIn(
+        @Header("email") email: String,
+        @Header("code") authCode : String
+    ) : AuthTokenResponse
 }

@@ -4,6 +4,8 @@ import android.app.Application
 import com.example.medicapp.data.CloudDataSource
 import com.example.medicapp.data.retrofit.RetrofitBuilder
 import com.example.medicapp.domain.RepositoryImpl
+import com.example.medicapp.presentation.auth.AuthCommunication
+import com.example.medicapp.presentation.auth.AuthViewModel
 import com.example.medicapp.presentation.send_code.SendCodeCommunication
 
 import com.example.medicapp.presentation.send_code.SendCodeViewModel
@@ -15,6 +17,7 @@ class MedicApp : Application() {
 
     lateinit var mainViewModel: MainViewModel
     lateinit var sendCodeViewModel : SendCodeViewModel
+    lateinit var authViewModel : AuthViewModel
     private val apiService = RetrofitBuilder.apiService
 
     override fun onCreate() {
@@ -27,6 +30,10 @@ class MedicApp : Application() {
         sendCodeViewModel = SendCodeViewModel(
             RepositoryImpl(CloudDataSource.Base(apiService, Gson())),
             SendCodeCommunication.Base()
+        )
+        authViewModel = AuthViewModel(
+            RepositoryImpl(CloudDataSource.Base(apiService, Gson())),
+            AuthCommunication.Base()
         )
     }
 }

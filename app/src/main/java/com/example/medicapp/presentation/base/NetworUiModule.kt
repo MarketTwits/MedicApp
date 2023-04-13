@@ -6,9 +6,8 @@ import com.example.medicapp.data.NetworkResult
 import kotlinx.coroutines.launch
 
 interface NetworkUiModule {
-     fun getData()
+     fun fetch()
      fun observe()
      fun setupListeners(){
-
      }
 }

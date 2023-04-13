@@ -6,4 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".presentation.send_code.SendCodeActivity">
 
+    <EditText
+        android:id="@+id/edEmail"
+        android:layout_width="319dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="384dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="@+id/edEmail"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/edEmail"
+        app:layout_constraintTop_toBottomOf="@+id/edEmail" />
 </androidx.constraintlayout.widget.ConstraintLayout>

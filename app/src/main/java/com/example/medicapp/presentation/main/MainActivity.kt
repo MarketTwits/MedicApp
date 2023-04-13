@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity(), NetworkUiModule {
         viewModel = (application as MedicApp).mainViewModel
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getData()
-        observe()
+//        fetch()
+//        observe()
         setupListener()
     }
     private fun setupListener(){
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), NetworkUiModule {
             startActivity(Intent(this, SendCodeActivity::class.java))
         }
     }
-    override fun getData(){
+    override fun fetch(){
         lifecycleScope.launch {
             viewModel.getCatalog()
         }

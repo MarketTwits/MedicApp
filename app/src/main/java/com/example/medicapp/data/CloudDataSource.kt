@@ -1,5 +1,6 @@
 package com.example.medicapp.data
 
+import com.example.medicapp.data.data_model.AuthTokenResponse
 import com.example.medicapp.data.data_model.CatalogCloud
 import com.example.medicapp.data.data_model.CatalogCloudItem
 import com.example.medicapp.data.data_model.SendCodeResponseCloud
@@ -15,6 +16,7 @@ import java.net.UnknownHostException
 interface CloudDataSource {
     suspend fun getCatalog(): NetworkResult<CatalogCloud>
     suspend fun sendAuthCode(email: String): NetworkResult<SendCodeResponseCloud>
+    suspend fun signIn(email: String, authCode : String) : NetworkResult<AuthTokenResponse>
 
     class Base(
         private val apiService: ApiService,
@@ -27,7 +29,6 @@ interface CloudDataSource {
                 NetworkResult.Error(e.message ?: "unknown exception")
             }
         }
-
         override suspend fun sendAuthCode(email: String): NetworkResult<SendCodeResponseCloud> {
             return try {
                 val request = apiService.sendAuthCode(email)
@@ -40,6 +41,28 @@ interface CloudDataSource {
                             SendCodeResponseCloud::class.java
                         )
                         val errorMessage = error.errors[0]
+                        NetworkResult.Error(errorMessage)
+                    }
+                    else -> NetworkResult.Error(e.message)
+                }
+            }
+        }
+
+        override suspend fun signIn(
+            email: String,
+            authCode: String,
+        ): NetworkResult<AuthTokenResponse> {
+            return try {
+                val request = apiService.signIn(email, authCode)
+                NetworkResult.Success(request)
+            } catch (e: Exception) {
+                when (e) {
+                    is HttpException -> {
+                        val error = gson.fromJson(
+                            e.response()?.errorBody()?.string(),
+                            AuthTokenResponse::class.java
+                        )
+                        val errorMessage = error.errors
                         NetworkResult.Error(errorMessage)
                     }
                     else -> NetworkResult.Error(e.message)
