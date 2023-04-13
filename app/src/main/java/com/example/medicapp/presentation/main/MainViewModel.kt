@@ -6,7 +6,8 @@ import com.example.medicapp.data.data_model.CatalogCloud
 import com.example.medicapp.data.data_model.CatalogCloudItem
 import com.example.medicapp.domain.RepositoryImpl
 import com.example.medicapp.presentation.BaseObserve
-import com.example.medicapp.presentation.NetworkCommunication
+import com.example.medicapp.presentation.Communication
+
 
 class MainViewModel(
     private val repository: RepositoryImpl,
@@ -25,6 +26,9 @@ class MainViewModel(
         val result = repository.getCatalog()
         networkCommunication.map(result)
     }
+}
+interface NetworkCommunication : Communication<NetworkResult<CatalogCloud>> {
+    class Base() : Communication.Abstract<NetworkResult<CatalogCloud>>(), NetworkCommunication
 }
 
 

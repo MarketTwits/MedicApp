@@ -4,6 +4,7 @@ import com.example.medicapp.data.CloudDataSource
 import com.example.medicapp.data.NetworkResult
 import com.example.medicapp.data.data_model.CatalogCloud
 import com.example.medicapp.data.data_model.CatalogCloudItem
+import com.example.medicapp.data.data_model.SendCodeResponseCloud
 import okhttp3.ResponseBody
 
 class RepositoryImpl(
@@ -12,7 +13,7 @@ class RepositoryImpl(
     override suspend fun getCatalog(): NetworkResult<CatalogCloud> {
        return cloudDataSource.getCatalog()
     }
-    override suspend fun sendEmail(email: String): NetworkResult<ResponseBody> {
+    override suspend fun sendEmail(email: String): NetworkResult<SendCodeResponseCloud> {
         return cloudDataSource.sendAuthCode(email)
     }
 }

@@ -8,4 +8,7 @@ import kotlinx.coroutines.launch
 interface NetworkUiModule {
      fun getData()
      fun observe()
+     fun setupListeners(){
+
+     }
 }

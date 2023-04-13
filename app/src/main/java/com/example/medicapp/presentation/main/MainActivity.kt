@@ -2,15 +2,13 @@ package com.example.medicapp.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.medicapp.MedicApp
 import com.example.medicapp.data.NetworkResult
-import com.example.medicapp.data.data_model.CatalogCloudItem
 import com.example.medicapp.databinding.ActivityMainBinding
-import com.example.medicapp.presentation.auth.AuthActivity
+import com.example.medicapp.presentation.send_code.SendCodeActivity
 import com.example.medicapp.presentation.base.NetworkUiModule
 import kotlinx.coroutines.launch
 
@@ -29,7 +27,7 @@ class MainActivity : AppCompatActivity(), NetworkUiModule {
     }
     private fun setupListener(){
         binding.button.setOnClickListener {
-            startActivity(Intent(this, AuthActivity::class.java))
+            startActivity(Intent(this, SendCodeActivity::class.java))
         }
     }
     override fun getData(){

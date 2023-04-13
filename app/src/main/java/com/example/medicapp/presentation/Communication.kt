@@ -5,15 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.medicapp.data.NetworkResult
 import com.example.medicapp.data.data_model.CatalogCloud
+import com.example.medicapp.data.data_model.SendCodeResponseCloud
 import okhttp3.ResponseBody
-
-interface NetworkCommunication : Communication<NetworkResult<CatalogCloud>>{
-    class Base() : Communication.Abstract<NetworkResult<CatalogCloud>>(), NetworkCommunication
-}
-interface AuthCommunication : Communication<NetworkResult<ResponseBody>>{
-    class Base() : Communication.Abstract<NetworkResult<ResponseBody>>(), AuthCommunication
-}
-
 interface BaseObserve<T : Any>{
     fun observe(owner: LifecycleOwner, observer: Observer<T>) = Unit
 }
