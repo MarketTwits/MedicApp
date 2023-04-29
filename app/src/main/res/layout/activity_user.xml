@@ -8,5 +8,6 @@
     android:layout_height="match_parent"
     android:name="com.example.medicapp.presentation.base_profile.analysis.AnalysisFragment"
     tools:layout="@layout/fragment_analyzes"
+    android:background="@color/white"
     tools:context=".presentation.base_profile.UserActivity">
 </androidx.fragment.app.FragmentContainerView>

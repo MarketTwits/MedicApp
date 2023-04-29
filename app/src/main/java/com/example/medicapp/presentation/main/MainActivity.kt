@@ -9,6 +9,7 @@ import com.example.medicapp.MedicApp
 import com.example.medicapp.data.NetworkResult
 import com.example.medicapp.databinding.ActivityMainBinding
 import com.example.medicapp.presentation.auth.sign_in.SignInActivity
+import com.example.medicapp.presentation.base_profile.UserActivity
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -20,22 +21,15 @@ class MainActivity : AppCompatActivity() {
         viewModel = (application as MedicApp).mainViewModel
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getData()
-        observe()
-        setupListener()
+       auth()
     }
-    private fun setupListener(){
-        binding.button.setOnClickListener {
+    private fun auth(){
+        if (viewModel.authUser()){
+            startActivity(Intent(this, UserActivity::class.java))
+            finish()
+        }else{
             startActivity(Intent(this, SignInActivity::class.java))
             finish()
         }
-    }
-    private fun getData(){
-        lifecycleScope.launch {
-            viewModel.getCatalog()
-        }
-    }
-    private fun observe(){
-
     }
 }

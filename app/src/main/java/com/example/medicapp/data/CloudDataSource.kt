@@ -3,6 +3,7 @@ package com.example.medicapp.data
 
 
 import com.example.medicapp.data.net.models.CatalogCloudItem
+import com.example.medicapp.data.net.models.NewsCloudItem
 import com.example.medicapp.data.net.models.SendCodeResponseCloud
 import com.example.medicapp.data.net.models.SignInResponseCloud
 import com.example.medicapp.data.net.retrofit.ApiService
@@ -11,6 +12,7 @@ import retrofit2.HttpException
 
 interface CloudDataSource {
     suspend fun getCatalog(): NetworkResult<List<CatalogCloudItem>>
+    suspend fun getNews() : NetworkResult<List<NewsCloudItem>>
     suspend fun sendAuthCode(email: String): NetworkResult<SendCodeResponseCloud>
     suspend fun signIn(email: String, authCode : String) : NetworkResult<SignInResponseCloud>
 
@@ -25,6 +27,15 @@ interface CloudDataSource {
                 NetworkResult.Error(e.message ?: "unknown exception")
             }
         }
+
+        override suspend fun getNews(): NetworkResult<List<NewsCloudItem>> {
+            return try {
+                NetworkResult.Success(apiService.getNews())
+            } catch (e: Exception) {
+                NetworkResult.Error(e.message ?: "unknown exception")
+            }
+        }
+
         override suspend fun sendAuthCode(email: String): NetworkResult<SendCodeResponseCloud> {
             return try {
                 val request = apiService.sendAuthCode(email)
