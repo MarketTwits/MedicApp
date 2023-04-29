@@ -8,11 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import com.example.medicapp.MedicApp
 import com.example.medicapp.data.NetworkResult
 import com.example.medicapp.databinding.ActivityMainBinding
-import com.example.medicapp.presentation.send_code.SendCodeActivity
-import com.example.medicapp.presentation.base.NetworkUiModule
+import com.example.medicapp.presentation.auth.sign_in.SignInActivity
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), NetworkUiModule {
+class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding
     lateinit var viewModel: MainViewModel
@@ -21,27 +20,22 @@ class MainActivity : AppCompatActivity(), NetworkUiModule {
         viewModel = (application as MedicApp).mainViewModel
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        fetch()
-//        observe()
+        getData()
+        observe()
         setupListener()
     }
     private fun setupListener(){
         binding.button.setOnClickListener {
-            startActivity(Intent(this, SendCodeActivity::class.java))
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
         }
     }
-    override fun fetch(){
+    private fun getData(){
         lifecycleScope.launch {
             viewModel.getCatalog()
         }
     }
-    override fun observe(){
-        viewModel.observe(this){
-            when(it){
-                is NetworkResult.Success -> {Log.d("market_twits",  it.data.toString() )}
-                is NetworkResult.Error -> {Log.d("market_twits",  it.message.toString() )}
-                is NetworkResult.Loading -> {Log.d("market_twits",  "loading") }
-            }
-        }
+    private fun observe(){
+
     }
 }

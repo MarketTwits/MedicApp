@@ -1,28 +1,24 @@
 package com.example.medicapp.data
 
-import com.example.medicapp.data.data_model.AuthTokenResponse
-import com.example.medicapp.data.data_model.CatalogCloud
-import com.example.medicapp.data.data_model.CatalogCloudItem
-import com.example.medicapp.data.data_model.SendCodeResponseCloud
-import com.example.medicapp.data.retrofit.ApiService
+
+
+import com.example.medicapp.data.net.models.CatalogCloudItem
+import com.example.medicapp.data.net.models.SendCodeResponseCloud
+import com.example.medicapp.data.net.models.SignInResponseCloud
+import com.example.medicapp.data.net.retrofit.ApiService
 import com.google.gson.Gson
-import okhttp3.HttpUrl
-import okhttp3.ResponseBody
 import retrofit2.HttpException
-import java.net.ConnectException
-import java.net.HttpURLConnection
-import java.net.UnknownHostException
 
 interface CloudDataSource {
-    suspend fun getCatalog(): NetworkResult<CatalogCloud>
+    suspend fun getCatalog(): NetworkResult<List<CatalogCloudItem>>
     suspend fun sendAuthCode(email: String): NetworkResult<SendCodeResponseCloud>
-    suspend fun signIn(email: String, authCode : String) : NetworkResult<AuthTokenResponse>
+    suspend fun signIn(email: String, authCode : String) : NetworkResult<SignInResponseCloud>
 
     class Base(
         private val apiService: ApiService,
         private val gson: Gson,
     ) : CloudDataSource {
-        override suspend fun getCatalog(): NetworkResult<CatalogCloud> {
+        override suspend fun getCatalog(): NetworkResult<List<CatalogCloudItem>> {
             return try {
                 NetworkResult.Success(apiService.getCatalog())
             } catch (e: Exception) {
@@ -40,18 +36,13 @@ interface CloudDataSource {
                             e.response()?.errorBody()?.string(),
                             SendCodeResponseCloud::class.java
                         )
-                        val errorMessage = error.errors[0]
-                        NetworkResult.Error(errorMessage)
+                        NetworkResult.Error(error.errors)
                     }
                     else -> NetworkResult.Error(e.message)
                 }
             }
         }
-
-        override suspend fun signIn(
-            email: String,
-            authCode: String,
-        ): NetworkResult<AuthTokenResponse> {
+        override suspend fun signIn(email: String, authCode : String) : NetworkResult<SignInResponseCloud>{
             return try {
                 val request = apiService.signIn(email, authCode)
                 NetworkResult.Success(request)
@@ -60,10 +51,9 @@ interface CloudDataSource {
                     is HttpException -> {
                         val error = gson.fromJson(
                             e.response()?.errorBody()?.string(),
-                            AuthTokenResponse::class.java
+                            SendCodeResponseCloud::class.java
                         )
-                        val errorMessage = error.errors
-                        NetworkResult.Error(errorMessage)
+                        NetworkResult.Error(error.errors)
                     }
                     else -> NetworkResult.Error(e.message)
                 }
