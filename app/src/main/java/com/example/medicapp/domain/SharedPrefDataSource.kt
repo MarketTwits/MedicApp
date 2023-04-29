@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 interface SharedPrefDataSource {
     fun saveAuthToken(token : String)
     fun getAuthToken() : String
+    fun cleanUserToken()
 
     class Base(context : Context) : SharedPrefDataSource{
 
@@ -18,6 +19,10 @@ interface SharedPrefDataSource {
 
         override fun getAuthToken(): String {
             return sharedPrefs.getString(SharedPreferencesKeys.AuthorizationToken.name, null) ?: ""
+        }
+
+        override fun cleanUserToken() {
+            sharedPrefs.edit().clear().apply()
         }
     }
 }

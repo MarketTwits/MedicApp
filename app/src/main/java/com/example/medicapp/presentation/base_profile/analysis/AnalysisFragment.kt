@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.medicapp.MedicApp
 import com.example.medicapp.R
 import com.example.medicapp.data.NetworkResult
@@ -12,13 +13,15 @@ import com.example.medicapp.data.net.models.CatalogCloudItem
 import com.example.medicapp.data.net.models.NewsCloudItem
 import com.example.medicapp.databinding.FragmentAnalyzesBinding
 import com.example.medicapp.presentation.base_profile.analysis.adapters.catalog_adapter.CatalogAdapter
+import com.example.medicapp.presentation.utils.refreshLayoutOffsetTopPanel
+import com.google.android.material.appbar.AppBarLayout
 import com.petrs.smartlab.ui.fragments.main.analyzes.news_adapter.NewsAdapter
 
 
 class AnalysisFragment : Fragment() {
 
-    lateinit var binding : FragmentAnalyzesBinding
-    lateinit var viewModel : AnalysisViewModel
+    lateinit var binding: FragmentAnalyzesBinding
+    lateinit var viewModel: AnalysisViewModel
     private val newsAdapter = NewsAdapter()
     private val catalogAdapter = CatalogAdapter()
 
@@ -30,7 +33,7 @@ class AnalysisFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View{
+    ): View {
         binding = FragmentAnalyzesBinding.inflate(inflater, container, false)
         viewModel = (requireActivity().application as MedicApp).analisysViewModel
         return binding.root
@@ -40,49 +43,57 @@ class AnalysisFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         refreshData()
+        initView()
+    }
+
+    private fun initView() {
+        refreshLayoutOffsetTopPanel(
+            binding.srlAnalyzes,
+            binding.appBarLayout
+        )
+        binding.srlAnalyzes.setOnRefreshListener {
+            refreshData()
+        }
+    }
+
+    private fun setupNewsAdapter(newsList: List<NewsCloudItem>) {
+        binding.rvNews.adapter = newsAdapter
+        newsAdapter.submitList(newsList)
+    }
+
+    private fun setupCatalogAdapter(catalogList: List<CatalogCloudItem>) {
+        binding.rvAnalyzes.adapter = catalogAdapter
+        catalogAdapter.submitList(catalogList)
+    }
+
+    private fun refreshData() {
         viewModel.getNews()
         viewModel.getCatalog()
     }
 
-    private fun setupNewsAdapter(newsList : List<NewsCloudItem>){
-        binding.rvNews.adapter = newsAdapter
-        newsAdapter.submitList(newsList)
-    }
-    private fun setupCatalogAdapter(catalogList : List<CatalogCloudItem>){
-        binding.rvAnalyzes.adapter = catalogAdapter
-        catalogAdapter.submitList(catalogList)
-    }
-    private fun refreshData(){
-        binding.srlAnalyzes.setOnRefreshListener {
-            viewModel.getNews()
-            viewModel.getCatalog()
-        }
-    }
     private fun observeViewModel() {
-        viewModel.newsLiveData.observe(viewLifecycleOwner){
-           when(it){
-               is NetworkResult.Success -> {
-                   setupNewsAdapter(checkNotNull(it.data))
-                   binding.srlAnalyzes.isRefreshing = false
-               }
-               is NetworkResult.Loading -> {
-                   binding.srlAnalyzes.isRefreshing = true
-               }
-               is NetworkResult.Error -> {
-                   binding.srlAnalyzes.isRefreshing = false
-               }
-           }
+        viewModel.newsLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResult.Success -> {
+                    setupNewsAdapter(checkNotNull(it.data))
+                    binding.srlAnalyzes.isRefreshing = false
+                }
+                is NetworkResult.Loading -> {
+                    binding.srlAnalyzes.isRefreshing = true
+                }
+                is NetworkResult.Error -> {
+                    binding.srlAnalyzes.isRefreshing = false
+                }
+            }
         }
-        viewModel.catalogLiveData.observe(viewLifecycleOwner){
-            when(it){
+        viewModel.catalogLiveData.observe(viewLifecycleOwner) {
+            when (it) {
                 is NetworkResult.Success -> {
                     setupCatalogAdapter(checkNotNull(it.data))
                 }
-                is NetworkResult.Loading -> {}
-                is NetworkResult.Error -> {}
+                else -> {
+                }
             }
         }
     }
-
-
 }

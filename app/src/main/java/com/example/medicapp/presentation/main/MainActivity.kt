@@ -1,5 +1,6 @@
 package com.example.medicapp.presentation.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -25,11 +26,13 @@ class MainActivity : AppCompatActivity() {
     }
     private fun auth(){
         if (viewModel.authUser()){
-            startActivity(Intent(this, UserActivity::class.java))
-            finish()
+            launchActivity(UserActivity::class.java)
         }else{
-            startActivity(Intent(this, SignInActivity::class.java))
-            finish()
+            launchActivity(SignInActivity::class.java)
         }
+    }
+    private fun <T>launchActivity(activity : Class<T>){
+        startActivity(Intent(this, activity))
+        finish()
     }
 }

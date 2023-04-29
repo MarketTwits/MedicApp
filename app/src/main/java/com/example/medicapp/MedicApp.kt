@@ -8,6 +8,7 @@ import com.example.medicapp.domain.SharedPrefDataSource
 import com.example.medicapp.presentation.auth.send_code.AuthViewModel
 import com.example.medicapp.presentation.auth.sign_in.SignInViewModel
 import com.example.medicapp.presentation.base_profile.analysis.AnalysisViewModel
+import com.example.medicapp.presentation.base_profile.profile.ProfileViewModel
 import com.example.medicapp.presentation.main.MainViewModel
 import com.google.gson.Gson
 
@@ -16,6 +17,7 @@ class MedicApp : Application() {
     lateinit var mainViewModel: MainViewModel
     lateinit var signInViewModel: SignInViewModel
     lateinit var analisysViewModel: AnalysisViewModel
+    lateinit var profileViewModel : ProfileViewModel
     private val apiService = RetrofitBuilder.apiService
 
     override fun onCreate() {
@@ -34,6 +36,9 @@ class MedicApp : Application() {
         )
         analisysViewModel = AnalysisViewModel(
             RepositoryImpl(CloudDataSource.Base(apiService, Gson()))
+        )
+        profileViewModel = ProfileViewModel(
+            SharedPrefDataSource.Base(this)
         )
     }
 }
