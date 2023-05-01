@@ -13,11 +13,9 @@ class RepositoryImpl(
     override suspend fun getCatalog(): NetworkResult<List<CatalogCloudItem>> {
        return cloudDataSource.getCatalog()
     }
-
     override suspend fun getNews(): NetworkResult<List<NewsCloudItem>> {
         return  cloudDataSource.getNews()
     }
-
     override suspend fun sendEmail(email: String): NetworkResult<SendCodeResponseCloud> {
         return cloudDataSource.sendAuthCode(email)
     }

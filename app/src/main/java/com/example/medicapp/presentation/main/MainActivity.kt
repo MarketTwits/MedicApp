@@ -13,7 +13,7 @@ import com.example.medicapp.presentation.auth.sign_in.SignInActivity
 import com.example.medicapp.presentation.base_profile.UserActivity
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HandleUIMainActivity {
 
     lateinit var binding : ActivityMainBinding
     lateinit var viewModel: MainViewModel
@@ -31,8 +31,11 @@ class MainActivity : AppCompatActivity() {
             launchActivity(SignInActivity::class.java)
         }
     }
-    private fun <T>launchActivity(activity : Class<T>){
+    override fun <T>launchActivity(activity : Class<T>){
         startActivity(Intent(this, activity))
         finish()
     }
+}
+interface HandleUIMainActivity{
+    fun <T>launchActivity(activity : Class<T> )
 }
